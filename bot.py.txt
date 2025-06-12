@@ -12,7 +12,7 @@ import asyncio import requests from solana.rpc.async_api import AsyncClient from
 
 =================== CONFIG ===================
 
-TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN" TELEGRAM_CHAT_ID = "@HIGHERCHAKRA"  # or your user ID DOLAN_CONTRACT = "4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" RPC_URL = "https://api.mainnet-beta.solana.com" WHITELISTED_TAGGED_WALLETS = { "builder": ["wallet1", "wallet2"], "early_buyer": ["wallet3"], "dump_whale": ["wallet4"] } SLIPPAGE_THRESHOLD = 0.05  # 5% DEX_API = "https://public-api.birdeye.so/public/price-impact" CEX_VOLUME_API = "https://api.dexscreener.com/latest/dex/pairs/solana/4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" SENTIMENT_ENDPOINT = "https://yourserver.com/sentiment"
+TELEGRAM_BOT_TOKEN = "7742326918:AAHJQoSUC_R6kYIhn2bpX4KZn5zF0V4DPgQ" TELEGRAM_CHAT_ID = "@HIGHERCHAKRA"  # or your user ID DOLAN_CONTRACT = "4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" RPC_URL = "https://api.mainnet-beta.solana.com" WHITELISTED_TAGGED_WALLETS = { "builder": ["wallet1", "wallet2"], "early_buyer": ["wallet3"], "dump_whale": ["wallet4"] } SLIPPAGE_THRESHOLD = 0.05  # 5% DEX_API = "https://public-api.birdeye.so/public/price-impact" CEX_VOLUME_API = "https://api.dexscreener.com/latest/dex/pairs/solana/4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" SENTIMENT_ENDPOINT = "https://yourserver.com/sentiment"
 
 =============================================
 
