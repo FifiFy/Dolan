@@ -1,0 +1,33 @@
+Dolan Exit Bot - Real-Time Telegram Alert System for Meme Coin Exit Strategy
+
+Author: ChatGPT for @HIGHERCHAKRA
+
+Chain: Solana
+
+Token: Dolan
+
+Contract: 4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z
+
+import asyncio import requests from solana.rpc.async_api import AsyncClient from solana.publickey import PublicKey from telegram import Bot from telegram.constants import ParseMode
+
+=================== CONFIG ===================
+
+TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN" TELEGRAM_CHAT_ID = "@HIGHERCHAKRA"  # or your user ID DOLAN_CONTRACT = "4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" RPC_URL = "https://api.mainnet-beta.solana.com" WHITELISTED_TAGGED_WALLETS = { "builder": ["wallet1", "wallet2"], "early_buyer": ["wallet3"], "dump_whale": ["wallet4"] } SLIPPAGE_THRESHOLD = 0.05  # 5% DEX_API = "https://public-api.birdeye.so/public/price-impact" CEX_VOLUME_API = "https://api.dexscreener.com/latest/dex/pairs/solana/4YK1njyeCkBuXG6phNtidJWKCbBhB659iwGkUJx98P5Z" SENTIMENT_ENDPOINT = "https://yourserver.com/sentiment"
+
+=============================================
+
+bot = Bot(token=TELEGRAM_BOT_TOKEN) solana_client = AsyncClient(RPC_URL)
+
+async def send_alert(message): await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode=ParseMode.HTML)
+
+async def track_wallets(): while True: try: recent_transactions = await solana_client.get_signatures_for_address(PublicKey(DOLAN_CONTRACT), limit=10) for tx in recent_transactions.value: tx_details = await solana_client.get_transaction(tx.signature) for tag, wallets in WHITELISTED_TAGGED_WALLETS.items(): for wallet in wallets: if wallet in str(tx_details): await send_alert(f"<b>{tag.upper()} Alert</b>\nWallet <code>{wallet}</code> interacted with Dolan.\nTx: {tx.signature}") except Exception as e: print("Error in wallet tracking:", e) await asyncio.sleep(60)
+
+async def check_slippage(): while True: try: response = requests.get(DEX_API, params={"token": DOLAN_CONTRACT}) data = response.json() slippage = data.get("priceImpact", 0) if slippage >= SLIPPAGE_THRESHOLD: await send_alert(f"<b>⚠️ High Slippage Detected</b>\n{slippage*100:.2f}% slippage on Dolan DEX pools.") except Exception as e: print("Error in slippage checker:", e) await asyncio.sleep(300)
+
+async def monitor_sentiment(): while True: try: resp = requests.get(SENTIMENT_ENDPOINT) sentiment = resp.json() if sentiment["saturation"] > 0.85: await send_alert("<b>🔥 Sentiment Saturation Warning</b>\nMemetic recycling detected. Top forming?") except Exception as e: print("Error in sentiment monitor:", e) await asyncio.sleep(600)
+
+async def monitor_volume_divergence(): while True: try: data = requests.get(CEX_VOLUME_API).json() vol24h = float(data.get("pair", {}).get("volume", 0)) price_change = float(data.get("pair", {}).get("priceChange", 0)) if vol24h > 100000 and price_change < 0: await send_alert(f"<b>🧨 Volume Divergence</b>\nHigh volume detected with dropping price. Watch for exit pumps.") except Exception as e: print("Error in volume divergence monitor:", e) await asyncio.sleep(300)
+
+async def main(): await send_alert("✅ <b>DolanExitBot Activated</b>\nTracking whales, slippage, sentiment, and volume now.") await asyncio.gather( track_wallets(), check_slippage(), monitor_sentiment(), monitor_volume_divergence() )
+
+if name == 'main': asyncio.run(main())
